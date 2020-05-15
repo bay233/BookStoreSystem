@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BBS</title>
+    <script src="js/vue.js"></script>
+    <script src="js/axios.js"></script>
+    <script src="js/jquery.js"></script>
+
+    <!-- bootstrap4 -->
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+    <style type="text/css"></style>
+</head>
+<body>
+    <div id="app">
+        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+            <ul class="navbar-nav">
+                <li :class="{'nav-item active':navClass[0],'nav-item':!navClass[0]}">
+                    <a class="nav-link" href="javascript:void(0)" @click="navClass=false;navClass[0]=true">Login</a>
+                </li>
+                <li :class="{'nav-item active':navClass[1],'nav-item':!navClass[1]}">
+                    <a class="nav-link" href="javascript:void(0)" @click="navClass=false;navClass[1]=true">Order</a>
+                </li>
+                <li :class="{'nav-item active':navClass[2],'nav-item':!navClass[2]}">
+                    <a class="nav-link" href="javascript:void(0)" @click="navClass=false;navClass[2]=true">Link</a>
+                </li>
+            </ul>
+        </nav>
+        <div class="input-group mb-3" style="width: 500px; margin: 0 auto; margin-top: 40px;">
+            <input type="text" class="form-control" placeholder="Search">
+            <div class="input-group-append">
+                <button class="btn btn-success" type="submit">Search</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        new Vue({
+            el:"#app",
+            data:{
+                navClass: [true,false,false],
+            },
+            methods:{
+
+            },
+        });
+
+    </script>
+</body>
+</html>
