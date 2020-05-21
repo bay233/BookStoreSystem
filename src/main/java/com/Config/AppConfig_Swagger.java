@@ -1,4 +1,4 @@
-package com.yc.config;
+package com.Config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -25,17 +25,17 @@ public class AppConfig_Swagger {
 				// 是否开启
 				.enable(SwaggerEnabled).select()
 				// 扫描的路径包，只要这些包中的类配置有swagger注解，则启用这些注解
-				.apis(RequestHandlerSelectors.basePackage("com.yc"))
+				.apis(RequestHandlerSelectors.basePackage("com"))
 				// 指定路径处理PathSelectors.any()代表所有的路径
 				.paths(PathSelectors.any()).build().pathMapping("/");
 	}
 
 	private ApiInfo apiInfo() {
 		return new ApiInfoBuilder()
-				.title("小萌订餐系统")
+				.title("图书销售系统")
 				.description("springboot | swagger")
 				// 作者信息
-				.contact(new Contact("yc", "http://www.hyycinfo.com", "baijiahui233@qq.com"))
+				.contact(new Contact("B5-415", "http://www.bay233.xyz", "baijiahui233@qq.com"))
 				.version("1.0.0")
 				.build();
 	}

@@ -1,14 +1,25 @@
 package com.Bean;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 
+@ApiModel(value = "商品", description="商品实体信息")
 public class Book implements Serializable {
+    @ApiModelProperty(value="商品编号", dataType = "java.lang.Long")
     private Long bId;
+    @ApiModelProperty(value="商品名称", dataType = "java.lang.String")
     private String bName;
+    @ApiModelProperty(value="商品详细说明", dataType = "java.lang.String")
     private String explain;
+    @ApiModelProperty(value="商品图片地址", dataType = "java.lang.String")
     private String picture;
+    @ApiModelProperty(value="商品类别", dataType = "java.lang.String")
     private String sort;
+    @ApiModelProperty(value="商品默认价格", dataType = "java.lang.Double")
     private Double price;
+    @ApiModelProperty(value="商品库存数", dataType = "java.lang.Integer")
     private Integer num;
 
     public void setbId(Long bId) {

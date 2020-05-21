@@ -5,10 +5,10 @@ import com.Bean.Book;
 public interface BookDao {
     /**
      * 根据商品id查询商品信息，主要用于与其他表进行连接查询
-     * @param uId  商品信息
+     * @param bId  商品id
      * @return  返回Book对象
      */
-    Book query(Long uId);
+    Book query(Long bId);
 
 
     /**
@@ -56,9 +56,15 @@ public interface BookDao {
 
     /**
      * 删除一件商品
-     * @param uId  商品的id
+     * @param bId  商品的id
      */
-    void deleteBook(Long uId);
+    void deleteBook(Long bId);
+
+    /**
+     * 修改库存
+     * @param bId 需要修改的商品的编号
+     */
+    void updateNum(Long bId, Integer num);
 
 
 

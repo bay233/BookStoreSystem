@@ -1,12 +1,20 @@
 package com.Bean;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+@ApiModel(value = "库存更改记录", description="库存记录实体信息")
 public class Record implements Serializable {
+    @ApiModelProperty(value="记录编号", dataType = "java.lang.Long")
     private Long rId;
+    @ApiModelProperty(value="商品编号", dataType = "java.lang.Long")
     private Long bId;
+    @ApiModelProperty(value="修改数量", dataType = "java.lang.Integer")
     private Integer num;
+    @ApiModelProperty(value="修改时间", dataType = "java.sql.Timestamp")
     private Timestamp dateTime;
 
 

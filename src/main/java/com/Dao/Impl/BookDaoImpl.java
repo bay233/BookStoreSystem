@@ -27,11 +27,11 @@ public class BookDaoImpl implements BookDao {
     }
 
     @Override
-    public Book query(Long uId) {
+    public Book query(Long bId) {
         return jdbcTemplate.queryForObject("select * from book where bId=?",
                 (rs, rowNum) -> {
                     return setBook(rs);
-                }, uId);
+                }, bId);
     }
 
     /**
@@ -174,8 +174,13 @@ public class BookDaoImpl implements BookDao {
     }
 
     @Override
-    public void deleteBook(Long uId) {
-        jdbcTemplate.update("delete from book where uId=?", uId);
+    public void deleteBook(Long bId) {
+        jdbcTemplate.update("delete from book where uId=?", bId);
+    }
+
+    @Override
+    public void updateNum(Long bId, Integer num) {
+        jdbcTemplate.update("update book set num=num+? where bId=?",num, bId);
     }
 
 

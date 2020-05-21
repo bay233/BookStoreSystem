@@ -1,4 +1,4 @@
-package Dao;
+package com.Dao;
 
 import com.Bean.User;
 import com.Config.AppConfig;

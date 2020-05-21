@@ -1,4 +1,4 @@
-package Dao;
+package com.Dao;
 
 import com.Bean.Order;
 import com.Config.AppConfig;
