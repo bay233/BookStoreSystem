@@ -14,7 +14,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class OrderDaoImpl implements OrderDao {
@@ -26,6 +28,13 @@ public class OrderDaoImpl implements OrderDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+
+    @Override
+    public Long count() {
+        return jdbcTemplate.query("select count(oId) from orders", (rs, rowNum) -> {
+            return rs.getLong(1);
+        }).get(0);
+    }
 
     @Override
     public Order query(Long oId) {
@@ -66,25 +75,25 @@ public class OrderDaoImpl implements OrderDao {
     public Order[] queryLimit(Order order, Integer start, Integer pageNum) {
         String sql = "select * from orders where 1=1 ";
         List<Object> obj = new ArrayList<>();
-        if(order != null){
-            if(order.getoId() != null){
+        if (order != null) {
+            if (order.getoId() != null) {
                 Order[] os = new Order[1];
                 os[0] = query(order.getbId());
                 return os;
             }
-            if(order.getuId() != null){
+            if (order.getuId() != null) {
                 sql += " and uId=? ";
                 obj.add(order.getuId());
             }
-            if(order.getbId() != null){
+            if (order.getbId() != null) {
                 sql += " and bId=? ";
                 obj.add(order.getbId());
             }
-            if(order.getDateTime() != null){
+            if (order.getDateTime() != null) {
                 sql += " and dateTime>? ";
                 obj.add(order.getDateTime());
             }
-            if(order.getState() != null){
+            if (order.getState() != null) {
                 sql += " and state=? ";
                 obj.add(order.getState());
             }
@@ -126,6 +135,39 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public void setState(Long oId, Integer state) {
         jdbcTemplate.update("update orders set state=? where oId=?", state, oId);
+    }
+
+    @Override
+    public  List<Map<String, String>> queryTotalByYear(Long bId) {
+        List<Map<String, String>> query = jdbcTemplate.query("SELECT DATE_FORMAT(dateTime, '%Y' ),SUM( `num`) FROM orders WHERE bId=1 GROUP BY DATE_FORMAT( dateTime, '%Y')", (rs, rowNum) -> {
+            Map<String, String> map = new HashMap<>();
+            map.put("date", rs.getString(1));
+            map.put("num", rs.getString(2));
+            return map;
+        }, bId);
+        return query;
+    }
+
+    @Override
+    public List<Map<String, String>> queryTotalByMath(Long bId) {
+        List<Map<String, String>> query = jdbcTemplate.query("SELECT DATE_FORMAT( dateTime, '%Y-%m' ),SUM( `num`) FROM orders WHERE bId=1 GROUP BY DATE_FORMAT( dateTime, '%Y-%m')", (rs, rowNum) -> {
+            Map<String, String> map = new HashMap<>();
+            map.put("date", rs.getString(1));
+            map.put("num", rs.getString(2));
+            return map;
+        }, bId);
+        return query;
+    }
+
+    @Override
+    public List<Map<String, String>> queryTotalByDay(Long bId) {
+        List<Map<String, String>> query = jdbcTemplate.query("SELECT DATE_FORMAT( dateTime, '%Y-%m-%d' ),SUM( `num`) FROM orders WHERE bId=1 GROUP BY DATE_FORMAT( dateTime, '%Y-%m-%d')", (rs, rowNum) -> {
+            Map<String, String> map = new HashMap<>();
+            map.put("date", rs.getString(1));
+            map.put("num", rs.getString(2));
+            return map;
+        }, bId);
+        return query;
     }
 
 

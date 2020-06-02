@@ -3,6 +3,9 @@ package com.Dao;
 import com.Bean.User;
 
 public interface UserDao {
+
+    Long count();
+
     /**
      * 根据用户Id查一个用户的信息
      * @param uId   用户Id

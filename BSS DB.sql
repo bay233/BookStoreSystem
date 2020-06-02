@@ -1,5 +1,5 @@
 
-use bss
+use bss;
 
 create table user(
     uId bigint PRIMARY key auto_increment,
@@ -20,6 +20,9 @@ create table book(
    num int
 );
 insert into book values(bId, "三体", "说明:买就完事了！！！！", "/imgs/1.png", "科幻", 55.5, 100);
+insert into book values(bId, "C语言程序设计", "说明:一入编程深似海", "/imgs/2.png", "技术", 40.0, 50);
+
+
 select * from book;
 
 create table orders(
@@ -36,6 +39,7 @@ create table orders(
 alter table orders add constraint order_user foreign key (uId) references user(uId);
 alter table orders add constraint order_book foreign key (bId) references book(bId);
 insert into orders values(oId, 1, 1, 1, "湖南永州", 13367465727, now(), 1);
+insert into orders values(oId, 1, 2, 1, "湖南永州", 13367465727, now(), 1);
 select * from orders;
 
 
@@ -46,6 +50,7 @@ create table record(
     `dateTime` dateTime
 );
 insert into record values(rId, 1, 100, now());
+insert into record values(rId, 2, 50, now());
 
 select * from record;
 

@@ -27,6 +27,13 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public Long count() {
+        return jdbcTemplate.query("select count(uId) from user",(rs, rowNum) -> {
+            return rs.getLong(1);
+        }).get(0);
+    }
+
+    @Override
     public User query(Long uId) {
         User user = jdbcTemplate.queryForObject("select * from user where uId=?", (rs, rowNum) -> {
             return setUser(rs);

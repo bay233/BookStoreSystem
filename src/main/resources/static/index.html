@@ -28,21 +28,28 @@
             </ul>
         </nav>
         <div class="input-group mb-3" style="width: 500px; margin: 0 auto; margin-top: 40px;">
-            <input type="text" class="form-control" placeholder="Search">
+            <input type="text" class="form-control" placeholder="Search" v-model="QueryBookKey">
             <div class="input-group-append">
-                <button class="btn btn-success" type="submit">Search</button>
+                <button class="btn btn-success" type="submit" @click="clickQueryBook()">Search</button>
             </div>
         </div>
+
+
     </div>
+
+
 
     <script>
         new Vue({
             el:"#app",
             data:{
                 navClass: [true,false,false],
+                QueryBookKey:"",
             },
             methods:{
-
+                clickQueryBook:function(){
+                    alert(this.QueryBookKey)
+                }
             },
         });
 

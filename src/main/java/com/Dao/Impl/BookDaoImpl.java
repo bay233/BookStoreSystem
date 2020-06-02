@@ -27,6 +27,13 @@ public class BookDaoImpl implements BookDao {
     }
 
     @Override
+    public Long count() {
+        return jdbcTemplate.query("select count(bId) from book",(rs, rowNum) -> {
+            return rs.getLong(1);
+        }).get(0);
+    }
+
+    @Override
     public Book query(Long bId) {
         return jdbcTemplate.queryForObject("select * from book where bId=?",
                 (rs, rowNum) -> {

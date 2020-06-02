@@ -27,6 +27,14 @@ public class RecordDaoImpl implements RecordDao {
 
 
     @Override
+    public Long count() {
+        return jdbcTemplate.query("select count(rId) from record",(rs, rowNum) -> {
+            return rs.getLong(1);
+        }).get(0);
+    }
+
+
+    @Override
     public Record[] query(Long bId) {
         List<Record> records = jdbcTemplate.query("select * from record where bId=?",
                 (rs, rowNum) -> {

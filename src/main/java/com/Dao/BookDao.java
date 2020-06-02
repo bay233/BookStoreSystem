@@ -4,6 +4,11 @@ import com.Bean.Book;
 
 public interface BookDao {
     /**
+     * 获取表中行数
+     */
+    Long count();
+
+    /**
      * 根据商品id查询商品信息，主要用于与其他表进行连接查询
      * @param bId  商品id
      * @return  返回Book对象
