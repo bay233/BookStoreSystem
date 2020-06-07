@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理页面</title>
+
+    <script src="/js/vue.js"></script>
+    <script src="/js/axios.js"></script>
+    <script src="/js/jquery.js"></script>
+
+    <!-- bootstrap4 -->
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+<div id="nav">
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <ul class="navbar-nav">
+            <li :class="{'nav-item active':navClass0,'nav-item':!navClass0}">
+                <a class="nav-link" href="javascript:void(0)" @click="clickNav(0)">Home</a>
+            </li>
+            <li :class="{'nav-item active':navClass1,'nav-item':!navClass1}">
+                <a class="nav-link" href="javascript:void(0)" @click="clickNav(1)">Login</a>
+            </li>
+            <li :class="{'nav-item active':navClass2,'nav-item':!navClass2}">
+                <a class="nav-link" href="javascript:void(0)" @click="clickNav(2)">Order</a>
+            </li>
+            <li :class="{'nav-item active':navClass3,'nav-item':!navClass3}">
+                <a class="nav-link" href="javascript:void(0)" @click="clickNav(3)">Link</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+<script>
+    new Vue({
+        el: "#nav",
+        data: {
+            navClass0: false, navClass1: false, navClass2: false, navClass3: true,
+
+        },
+        methods: {
+            clickNav: function (index) {
+                this.navClass0 = false;
+                this.navClass1 = false;
+                this.navClass2 = false;
+                this.navClass3 = false;
+                switch (index) {
+                    case 0:
+                        this.navClass0 = true;
+                        window.location.href = "/index.html";
+                        break;
+                    case 1:
+                        this.navClass1 = true;
+                        break;
+                    case 2:
+                        this.navClass2 = true;
+                        break;
+                    case 3:
+                        this.navClass3 = true;
+                        window.location.href = "/administration.html";
+                        break;
+                }
+            }
+        },
+    });
+
+</script>
+
+<div id="context">
+    <div id="administration">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-3 col-md-6 col-lg-4 col-xl-2" style="width: 250px;margin-top: 50px;">
+                    <div class="container">
+                        <div id="accordion">
+                            <div class="card">
+                                <div class="card-header">
+                                    <a class="card-link" data-toggle="collapse" href="#collapseOne">
+                                        库存管理
+                                    </a>
+                                </div>
+                                <div id="collapseOne" class="collapse show" data-parent="#accordion">
+                                    <div class="container">
+                                        <ul class="nav flex-column">
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="javascript:void(0)"
+                                                   @click="clickinsertRecord()">添加商品</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="javascript:void(0)"
+                                                   @click="clickOtherRecord()">商品管理</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header">
+                                    <a class="collapsed card-link" data-toggle="collapse" href="#collapseTwo">
+                                        销售统计
+                                    </a>
+                                </div>
+                                <div id="collapseTwo" class="collapse" data-parent="#accordion">
+                                    <div class="container">
+                                        <ul class="nav flex-column">
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="javascript:void(0)"
+                                                   @click="statistics()">销售统计</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-header">
+                                    <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree">
+                                        订单管理
+                                    </a>
+                                </div>
+                                <div id="collapseThree" class="collapse" data-parent="#accordion">
+                                    <div class="container">
+                                        <ul class="nav flex-column">
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="javascript:void(0)">退款订单管理</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="javascript:void(0)">发货订单管理</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-sm-9 col-md-6 col-lg-8 col-xl-10" style="margin-top: 50px;">
+                    <div id="queryResult">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<script>
+    $("#queryResult").load("/sub/admin/home.html");
+    new Vue({
+        el: "#administration",
+        data: {},
+        methods: {
+            clickinsertRecord: function () {
+                $("#queryResult").load("/sub/admin/insertRecord.html");
+            },
+            clickOtherRecord: function () {
+                $("#queryResult").load("/sub/admin/otherRecord.html");
+            },
+            statistics: function () {
+                $("#queryResult").load("/sub/admin/statistics.html");
+            }
+        },
+    });
+
+</script>
+</html>

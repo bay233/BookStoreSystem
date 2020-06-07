@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>stockInfo</title>
+</head>
+<body>
+<div id="stockInfo">
+    <h2>商品详情销售情况</h2>
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#Overview" @click="clickOverview()">总览</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#orderInfo" @click="clickorderInfo()">销售记录</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#Stock" @click="clickStock()">库存记录</a>
+        </li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div id="Overview" class="container tab-pane active"><br>
+            <p>{{groupDateBean.total}}</p>
+        </div>
+        <div id="orderInfo" class="container tab-pane fade"><br>
+            <p>{{orderInfoBean}}</p>
+        </div>
+        <div id="Stock" class="container tab-pane fade"><br>
+            <p>{{recordInfoBean}}</p>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    var stockInfoVue = new Vue({
+        el: "#stockInfo",
+        data: {
+            bId: $("#statistics").attr("data-InfobId"),
+            overviewDiv: true,
+            orderInfoDiv: false,
+            StockDiv: false,
+            groupDateBean: null,
+            orderInfoBean: null,
+            recordInfoBean: null,
+        },
+        methods: {
+            clickOverview: function () {
+                this.overviewDiv = true;
+                this.orderInfoDiv = false;
+                this.StockDiv = false;
+                this.groupDateBean = overview(this.bId);
+                alert(this.groupDateBean)
+            },
+            clickorderInfo: function () {
+                this.overviewDiv = false;
+                this.orderInfoDiv = true;
+                this.StockDiv = false;
+                $.post("/bookStore/orderInfo", {"bId":this.bId,"pageno":1}, (data) => {
+                    if (data == 1) {
+                        this.orderInfoBean = data.obj;
+                    }
+
+                })
+            },
+            clickStock: function () {
+                this.overviewDiv = false;
+                this.orderInfoDiv = false;
+                this.StockDiv = true;
+                $.post("/bookStore/recordInfo", {"bId":this.bId,"pageno":1}, (data) => {
+                    if (data == 1) {
+                        this.recordInfoBean = data.obj;
+                    }
+                })
+            }
+        },
+        mounted: function () {
+            this.groupDateBean = overview(this.bId);
+
+        }
+    });
+
+    function overview(bId) {
+        $.post("/bookStore/totalRecord", {"bId": bId}, (data) => {
+            if (data.code == 1) {
+                return data.obj;
+            }
+        })
+    }
+
+</script>
+
+</body>
+</html>

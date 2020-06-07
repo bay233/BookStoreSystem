@@ -1,4 +1,5 @@
-server:  
+spring.thymeleaf.cache: false
+server:
     port: 9090
     servlet: 
        session.timeout: 60000   

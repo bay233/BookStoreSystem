@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>home query</title>
+</head>
+<body>
+<div id="homeQuery">
+    <div class="input-group mb-3" style="width: 500px; margin: 0 auto; margin-top: 40px;">
+        <input type="text" class="form-control" placeholder="Search" v-model="QueryBookKey">
+        <div class="input-group-append">
+            <button class="btn btn-success" type="submit" @click="clickQueryBook()">Search</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    new Vue({
+        el: "#homeQuery",
+        data: {
+            QueryBookKey: "",
+        },
+        methods: {
+            clickQueryBook: function () {
+                alert(this.QueryBookKey)
+            }
+        },
+    });
+
+</script>
+</body>
+</html>

@@ -14,16 +14,18 @@ create table book(
    bId bigint PRIMARY key auto_increment,
    bName varchar(40) not null,
    `explain` text,
-   picture varchar(100),
+   picture text,
    sort varchar(20),
    price double not null,
    num int
 );
+ALTER  TABLE book MODIFY picture text;
+
 insert into book values(bId, "三体", "说明:买就完事了！！！！", "/imgs/1.png", "科幻", 55.5, 100);
 insert into book values(bId, "C语言程序设计", "说明:一入编程深似海", "/imgs/2.png", "技术", 40.0, 50);
 
-
 select * from book;
+desc book;
 
 create table orders(
     `oId` bigint PRIMARY key auto_increment,

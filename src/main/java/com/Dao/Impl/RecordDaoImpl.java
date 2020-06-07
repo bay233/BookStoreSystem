@@ -69,7 +69,7 @@ public class RecordDaoImpl implements RecordDao {
 
     @Override
     public Record addRecord(Record record) {
-        String sql = "insert into user values(rId,?,?,now())";
+        String sql = "insert into record values(rId,?,?,now())";
         // 使用回调机制返回新添加的数据的自增列值，这里是返回uId
         KeyHolder kh = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {

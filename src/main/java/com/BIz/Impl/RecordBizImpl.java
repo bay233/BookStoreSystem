@@ -3,7 +3,6 @@ package com.BIz.Impl;
 import com.BIz.RecordBiz;
 import com.Bean.Book;
 import com.Bean.Record;
-import com.Common.Utils.Log;
 import com.Dao.BookDao;
 import com.Dao.RecordDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,6 @@ public class RecordBizImpl implements RecordBiz {
             try {
                 throw new Exception("Book object is missing Name or Price attribute");
             } catch (Exception e) {
-                Log.log.error(e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -58,7 +56,7 @@ public class RecordBizImpl implements RecordBiz {
 
     @Override
     public void addStock(Record record) {
-        addStock(record.getbId(), record.getNum());
+        updateStock(record);
     }
 
     @Override
@@ -91,7 +89,6 @@ public class RecordBizImpl implements RecordBiz {
             try {
                 throw new Exception("Record object is missing attribute Name or Price");
             } catch (Exception e) {
-                Log.log.error(e.getMessage());
                 e.printStackTrace();
             }
         }

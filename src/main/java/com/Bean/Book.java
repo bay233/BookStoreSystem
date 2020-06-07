@@ -18,9 +18,9 @@ public class Book implements Serializable {
     @ApiModelProperty(value="商品类别", dataType = "java.lang.String")
     private String sort;
     @ApiModelProperty(value="商品默认价格", dataType = "java.lang.Double")
-    private Double price;
+    private Double price = 0.0;
     @ApiModelProperty(value="商品库存数", dataType = "java.lang.Integer")
-    private Integer num;
+    private Integer num = 0;
 
     public void setbId(Long bId) {
         this.bId = bId;

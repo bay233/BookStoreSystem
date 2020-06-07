@@ -139,7 +139,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public  List<Map<String, String>> queryTotalByYear(Long bId) {
-        List<Map<String, String>> query = jdbcTemplate.query("SELECT DATE_FORMAT(dateTime, '%Y' ),SUM( `num`) FROM orders WHERE bId=1 GROUP BY DATE_FORMAT( dateTime, '%Y')", (rs, rowNum) -> {
+        List<Map<String, String>> query = jdbcTemplate.query("SELECT DATE_FORMAT(dateTime, '%Y' ),SUM( `num`) FROM orders WHERE bId=? GROUP BY DATE_FORMAT( dateTime, '%Y')", (rs, rowNum) -> {
             Map<String, String> map = new HashMap<>();
             map.put("date", rs.getString(1));
             map.put("num", rs.getString(2));
@@ -150,7 +150,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public List<Map<String, String>> queryTotalByMath(Long bId) {
-        List<Map<String, String>> query = jdbcTemplate.query("SELECT DATE_FORMAT( dateTime, '%Y-%m' ),SUM( `num`) FROM orders WHERE bId=1 GROUP BY DATE_FORMAT( dateTime, '%Y-%m')", (rs, rowNum) -> {
+        List<Map<String, String>> query = jdbcTemplate.query("SELECT DATE_FORMAT( dateTime, '%Y-%m' ),SUM( `num`) FROM orders WHERE bId=? GROUP BY DATE_FORMAT( dateTime, '%Y-%m')", (rs, rowNum) -> {
             Map<String, String> map = new HashMap<>();
             map.put("date", rs.getString(1));
             map.put("num", rs.getString(2));
@@ -161,7 +161,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public List<Map<String, String>> queryTotalByDay(Long bId) {
-        List<Map<String, String>> query = jdbcTemplate.query("SELECT DATE_FORMAT( dateTime, '%Y-%m-%d' ),SUM( `num`) FROM orders WHERE bId=1 GROUP BY DATE_FORMAT( dateTime, '%Y-%m-%d')", (rs, rowNum) -> {
+        List<Map<String, String>> query = jdbcTemplate.query("SELECT DATE_FORMAT( dateTime, '%Y-%m-%d' ),SUM( `num`) FROM orders WHERE bId=? GROUP BY DATE_FORMAT( dateTime, '%Y-%m-%d')", (rs, rowNum) -> {
             Map<String, String> map = new HashMap<>();
             map.put("date", rs.getString(1));
             map.put("num", rs.getString(2));

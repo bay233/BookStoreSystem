@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>statistics</title>
+</head>
+<body>
+<div id="statistics">
+    <h2>销售统计</h2>
+    <div class="input-group mb-3" style="width: 500px; margin:0px auto; margin-top: 40px;">
+        <input type="text" class="form-control" placeholder="Search" v-model="QueryBookKey">
+        <div class="input-group-append">
+            <button class="btn btn-success" type="submit" @click="clickQueryBook()">Search</button>
+        </div>
+    </div>
+
+    <div>
+        <div class="border rounded" v-for="o in PageBean['list']"
+             style="float: left;width: 40%;margin: 10px auto;margin-left: 10px;padding-left: 10px;">
+            <!-- <div style="width: 50px; height: 85px; float: left;">
+                <img src="/img/1.jpg" style="height: 100%; width: 100%; ">
+            </div>-->
+
+            <div style="float: left; width: 70%;margin-top: 2%; margin-left: 4%;">
+                <h5>{{o.bName}}</h5>
+                <p>库存数量<strong>{{o.num}}</strong></p>
+            </div>
+
+            <div style="float: left;">
+                <ul class="nav justify-content-end">
+                    <li class="nav-item">
+                        <a class="nav-link text-info" href="javascript:void(0)" @click="clickStockInfo(`${o.bId}`)">查看详情</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-info" href="javascript:void(0)" data-toggle="modal" :data-target="'#addStock'+(o.bId)">添加库存</a>
+                    </li>
+
+                    <!-- 模态框 -->
+                    <div class="modal fade" :id="'addStock'+(o.bId)">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <!-- 模态框头部 -->
+                                <div class="modal-header">
+                                    <h4 class="modal-title">请输入需要添加的库存数</h4>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+                                <!-- 模态框主体 -->
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="addStockNum">请输数量:</label>
+                                        <input type="number" class="form-control" id="addStockNum" v-model="addStockNum">
+                                    </div>
+                                </div>
+                                <!-- 模态框底部 -->
+                                <div class="modal-footer">
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal" @click="clickAddStock(`${o.bId}`)">确定</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="addStockNum=0">关闭</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <li class="nav-item">
+                        <a class="nav-link text-info" href="javascript:void(0)" data-toggle="modal" :data-target="'#lessStock'+(o.bId)">减少库存</a>
+                    </li>
+
+                    <!-- 模态框 -->
+                    <div class="modal fade" :id="'lessStock'+(o.bId)">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <!-- 模态框头部 -->
+                                <div class="modal-header">
+                                    <h4 class="modal-title">请输入需要减少的库存数</h4>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+                                <!-- 模态框主体 -->
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="lessStockNum">请输数量:</label>
+                                        <input type="number" class="form-control" id="lessStockNum" v-model="lessStockNum">
+                                    </div>
+                                </div>
+                                <!-- 模态框底部 -->
+                                <div class="modal-footer">
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal" @click="clicklessStock(`${o.bId}`)">确定</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="lessStockNum=0">关闭</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-danger" href="javascript:void(0)" data-toggle="modal" :data-target="'#deleteGoods'+(o.bId)">删除商品</a>
+                    </li>
+
+                    <!-- 模态框 -->
+                    <div class="modal fade" :id="'deleteGoods'+(o.bId)">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <!-- 模态框头部 -->
+                                <div class="modal-header">
+                                    <h4 class="modal-title">提示！</h4>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+                                <!-- 模态框主体 -->
+                                <div class="modal-body">
+                                    您确定要删除此商品吗？
+                                </div>
+                                <!-- 模态框底部 -->
+                                <div class="modal-footer">
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-warning" data-dismiss="modal" @click="clickdeleteGoods(`${o.bId}`)">确定</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" >关闭</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </ul>
+            </div>
+        </div>
+
+        <div style="clear: both;"></div>
+        <div class="container" style="margin-left: 35%;">
+            <ul class="pagination">
+                <li :class="{'page-item disabled': PageBean.prepage==PageBean.pageno,'page-item':true}">
+                    <a class="page-link" href="javascript:void(0)" @click="clickPrevious()">Previous</a>
+                </li>
+                <li :class="{'page-item disabled': PageBean.nextpage==PageBean.pageno,'page-item':true}">
+                    <a class="page-link" href="javascript:void(0)" @click="clickNext()">Next</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 模态框 -->
+    <div class="modal fade" id="message" data-toggle="modal" data-target="#message">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- 模态框头部 -->
+                <div class="modal-header">
+                    <h4 class="modal-title">提示！</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <!-- 模态框主体 -->
+                <div class="modal-body">
+                    {{messageContent}}
+                </div>
+                <!-- 模态框底部 -->
+                <div class="modal-footer">
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" >确定</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" >关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    new Vue({
+        el: "#statistics",
+        data: {
+            QueryBookKey: "",
+            PageBean: {},
+            addStockNum:0,
+            lessStockNum:0,
+            messageContent:"",
+        },
+        methods: {
+            clickNext:function(){
+                $.post("/bookStore/pageStockInfo",{"pageno":this.PageBean.nextpage},(data)=>{
+                    if(data.code == 1) {
+                        this.PageBean = data.obj;
+                    }
+                })
+            },
+            clickPrevious:function(){
+                $.post("/bookStore/pageStockInfo",{"pageno":this.PageBean.prepage},(data)=>{
+                    if(data.code == 1) {
+                        this.PageBean = data.obj;
+                    }
+                })
+            },
+
+            clickAddStock:function(bId){
+                $.post("/bookStore/addStock",{"bId":bId,"num":this.addStockNum},(data)=>{
+                    if (data.code == 1){
+                        this.messageContent = "成功添加:"+this.addStockNum;
+                        $('#message').click();
+                    }else{
+                        this.messageContent = "操作失败！";
+                        $('#message').click();
+                    }
+                })
+            },
+            clicklessStock:function(bId){
+                $.post("/bookStore/subtractStock",{"bId":bId,"num":this.lessStockNum},(data)=>{
+                    if (data.code == 1){
+                        this.messageContent = "成功减少:"+this.lessStockNum;
+                        $('#message').click();
+                    }else{
+                        this.messageContent = "操作失败！";
+                        $('#message').click();
+                    }
+                })
+            },
+            clickdeleteGoods:function(bId){
+                $.post("/bookStore/deleteGoods",{"bId":bId},(data)=>{
+                    if (data.code == 1){
+                        this.messageContent = "成功删除！";
+                        $('#message').click();
+                    }else{
+                        this.messageContent = "操作失败！";
+                        $('#message').click();
+                    }
+                })
+            },
+            clickStockInfo:function(bId){
+                $("#statistics").load("/sub/admin/stockInfo.html");
+                $("#statistics").attr("data-InfobId",bId);
+            }
+        },
+        mounted: function () {
+            $.get("/bookStore/recordInit", (data) => {
+                if (data.code == 1) {
+                    this.PageBean = data.obj;
+                }
+            })
+        }
+    })
+
+</script>
+
+</body>
+</html>

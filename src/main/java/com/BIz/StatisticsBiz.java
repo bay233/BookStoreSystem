@@ -6,7 +6,7 @@ import com.Common.Model.TotalRecordView;
 
 public interface StatisticsBiz {
 
-    Integer PAGENUM = 15;
+    Integer PAGENUM = 16;
     /**
      * 初始化查看库存数，获取按bId升序排列的商品的库存数
      * StockView 是一个带商品id，name，num的对象  用于封装查询库存结果

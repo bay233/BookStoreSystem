@@ -162,7 +162,7 @@ public class BookDaoImpl implements BookDao {
 
     @Override
     public Book addBook(Book book) {
-        String sql = "insert into book values(bId,?,?,?,?,?,?)";
+        String sql = "insert into book values(bId,?,?,?,?,?,0)";
         // 使用回调机制返回新添加的数据的自增列值，这里是返回uId
         KeyHolder kh = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
@@ -172,7 +172,6 @@ public class BookDaoImpl implements BookDao {
             ps.setString(3, book.getPicture());
             ps.setString(4, book.getSort());
             ps.setDouble(5, book.getPrice());
-            ps.setInt(6, book.getNum());
             return ps;
         }, kh);
         Long key = kh.getKey().longValue();

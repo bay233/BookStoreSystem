@@ -123,3 +123,4 @@ buildNumber.properties
 .idea/encodings.xml
 .idea/modules.xml
 bookStore.iml
+/bin/
