@@ -11,7 +11,7 @@ public class User implements Serializable {
     @ApiModelProperty(value="用户编号", dataType = "java.lang.Long")
     private Long uId;
     @ApiModelProperty(value="用户邮件", dataType = "java.lang.String")
-    private String uEmai;
+    private String uEmail;
     @ApiModelProperty(value="用户密码", dataType = "java.lang.String")
     private String uPwd;
     @ApiModelProperty(value="用户名称", dataType = "java.lang.String")
@@ -20,7 +20,7 @@ public class User implements Serializable {
     public User() { }
 
     public User(String uEmai, String uPwd, String uName) {
-        this.uEmai = uEmai;
+        this.uEmail = uEmai;
         this.uPwd = uPwd;
         this.uName = uName;
     }
@@ -29,8 +29,8 @@ public class User implements Serializable {
         this.uId = uId;
     }
 
-    public void setuEmai(String uEmai) {
-        this.uEmai = uEmai;
+    public void setuEmail(String uEmai) {
+        this.uEmail = uEmai;
     }
 
     public void setuPwd(String uPwd) {
@@ -45,8 +45,8 @@ public class User implements Serializable {
         return uId;
     }
 
-    public String getuEmai() {
-        return uEmai;
+    public String getuEmail() {
+        return uEmail;
     }
 
     public String getuPwd() {
@@ -61,7 +61,7 @@ public class User implements Serializable {
     public String toString() {
         return "User{" +
                 "uId=" + uId +
-                ", uEmai='" + uEmai + '\'' +
+                ", uEmai='" + uEmail + '\'' +
                 ", uPwd='" + uPwd + '\'' +
                 ", uName='" + uName + '\'' +
                 '}';

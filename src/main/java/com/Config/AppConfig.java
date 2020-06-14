@@ -22,8 +22,8 @@ public class AppConfig {
 		dataSource.setPassword("a");
 		return dataSource;
 	}
-	
-	
+
+
 	/**
 	 * 事务管理配置
 	 * @param ds  指定数据源

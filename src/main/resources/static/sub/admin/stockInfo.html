@@ -9,26 +9,127 @@
     <h2>商品详情销售情况</h2>
     <ul class="nav nav-tabs">
         <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="#Overview" @click="clickOverview()">总览</a>
+            <a class="nav-link active" data-toggle="tab" href="#Overview">总览</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#orderInfo" @click="clickorderInfo()">销售记录</a>
+            <a class="nav-link" data-toggle="tab" href="#orderInfo">销售记录</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#Stock" @click="clickStock()">库存记录</a>
+            <a class="nav-link" data-toggle="tab" href="#Stock">库存记录</a>
         </li>
     </ul>
 
     <!-- Tab panes -->
     <div class="tab-content">
         <div id="Overview" class="container tab-pane active"><br>
-            <p>{{groupDateBean.total}}</p>
+            <h4>总共销售:{{groupDateBean.total}}件</h4>
+            <hr/>
+            <br/>
+            <table class="table" style="width: 500px; margin-left: 10%">
+                <thead>
+                <h5>按年划分:</h5>
+                <tr>
+                    <th>时间</th>
+                    <th>数量</th>
+                </tr>
+                </thead>
+                <tbody v-for="item in groupDateBean.groupYear">
+                <tr>
+                    <td>{{item.date.split(".")[0].replace("T"," ")}}</td>
+                    <td>{{item.num}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <hr/>
+            <br/>
+            <table class="table" style="width: 500px; margin-left: 10%">
+                <thead>
+                <h5>按月划分:</h5>
+                <tr>
+                    <th>时间</th>
+                    <th>数量</th>
+                </tr>
+                </thead>
+                <tbody v-for="item in groupDateBean.groupMath">
+                <tr>
+                    <td>{{item.date.split(".")[0].replace("T"," ")}}</td>
+                    <td>{{item.num}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <hr/>
+            <br/>
+            <table class="table" style="width: 500px; margin-left: 10%">
+                <thead>
+                <h5>按日划分:</h5>
+                <tr>
+                    <th>时间</th>
+                    <th>数量</th>
+                </tr>
+                </thead>
+                <tbody v-for="item in groupDateBean.groupDay">
+                <tr>
+                    <td>{{item.date.split(".")[0].replace("T"," ")}}</td>
+                    <td>{{item.num}}</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
+
         <div id="orderInfo" class="container tab-pane fade"><br>
-            <p>{{orderInfoBean}}</p>
+            <table class="table" style="width: 600px; margin-left: 10%">
+                <thead>
+                <tr>
+                    <th>序列号</th>
+                    <th>数量</th>
+                    <th>时间</th>
+                </tr>
+                </thead>
+                <tbody v-for="item,index in orderInfoBean.list">
+                <tr>
+                    <td>{{index}}</td>
+                    <td>{{item.num}}</td>
+                    <td>{{item.dateTime.split(".")[0].replace("T"," ")}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="container" style="margin-left: 25%;">
+                <ul class="pagination">
+                    <li :class="{'page-item disabled': orderInfoBean.prepage==orderInfoBean.pageno,'page-item':true}">
+                        <a class="page-link" href="javascript:void(0)" @click="clickorderInfoPrevious()">Previous</a>
+                    </li>
+                    <li :class="{'page-item disabled': orderInfoBean.nextpage==orderInfoBean.pageno,'page-item':true}">
+                        <a class="page-link" href="javascript:void(0)" @click="clickorderInfoNext()">Next</a></li>
+                </ul>
+            </div>
         </div>
-        <div id="Stock" class="container tab-pane fade"><br>
-            <p>{{recordInfoBean}}</p>
+        <div id="Stock" class="container tab-pane fade"><br/>
+            <table class="table" style="width: 600px; margin-left: 10%">
+                <thead>
+                <tr>
+                    <th>序列号</th>
+                    <th>数量</th>
+                    <th>时间</th>
+                </tr>
+                </thead>
+                <tbody v-for="item,index in recordInfoBean.list">
+                <tr>
+                    <td>{{index}}</td>
+                    <td>{{item.num}}</td>
+                    <td>{{item.dateTime.split(".")[0].replace("T"," ")}}</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div class="container" style="margin-left: 25%;">
+                <ul class="pagination">
+                    <li :class="{'page-item disabled': recordInfoBean.prepage==recordInfoBean.pageno,'page-item':true}">
+                        <a class="page-link" href="javascript:void(0)" @click="clickrecordInfoPrevious()">Previous</a>
+                    </li>
+                    <li :class="{'page-item disabled': recordInfoBean.nextpage==recordInfoBean.pageno,'page-item':true}">
+                        <a class="page-link" href="javascript:void(0)" @click="clickrecordInfoNext()">Next</a></li>
+                </ul>
+            </div>
         </div>
     </div>
 
@@ -39,56 +140,64 @@
         el: "#stockInfo",
         data: {
             bId: $("#statistics").attr("data-InfobId"),
-            overviewDiv: true,
-            orderInfoDiv: false,
-            StockDiv: false,
-            groupDateBean: null,
-            orderInfoBean: null,
-            recordInfoBean: null,
+            groupDateBean: {},
+            orderInfoBean: {},
+            recordInfoBean: {},
         },
         methods: {
-            clickOverview: function () {
-                this.overviewDiv = true;
-                this.orderInfoDiv = false;
-                this.StockDiv = false;
-                this.groupDateBean = overview(this.bId);
-                alert(this.groupDateBean)
-            },
-            clickorderInfo: function () {
-                this.overviewDiv = false;
-                this.orderInfoDiv = true;
-                this.StockDiv = false;
-                $.post("/bookStore/orderInfo", {"bId":this.bId,"pageno":1}, (data) => {
-                    if (data == 1) {
-                        this.orderInfoBean = data.obj;
+            clickorderInfoPrevious: function () {
+                $.post("/bookStore/orderInfo", {"bId": this.bId, "pageno": this.orderInfoBean.nextpage}, (data) => {
+                    if (data.code == 1) {
+                        this.PageBean = data.obj;
                     }
+                })
+            },
+            clickorderInfoNext: function () {
+                $.post("/bookStore/orderInfo", {"bId": this.bId, "pageno": this.orderInfoBean.prepage}, (data) => {
+                    if (data.code == 1) {
+                        this.PageBean = data.obj;
+                    }
+                })
+            },
 
-                })
-            },
-            clickStock: function () {
-                this.overviewDiv = false;
-                this.orderInfoDiv = false;
-                this.StockDiv = true;
-                $.post("/bookStore/recordInfo", {"bId":this.bId,"pageno":1}, (data) => {
-                    if (data == 1) {
-                        this.recordInfoBean = data.obj;
+            clickrecordInfoPrevious: function () {
+                $.post("/bookStore/recordInfo", {"bId": this.bId, "pageno": this.recordInfoBean.nextpage}, (data) => {
+                    if (data.code == 1) {
+                        this.PageBean = data.obj;
                     }
                 })
-            }
+            },
+            clickrecordInfoNext: function () {
+                $.post("/bookStore/recordInfo", {"bId": this.bId, "pageno": this.recordInfoBean.prepage}, (data) => {
+                    if (data.code == 1) {
+                        this.PageBean = data.obj;
+                    }
+                })
+            },
+
         },
         mounted: function () {
-            this.groupDateBean = overview(this.bId);
+            $.post("/bookStore/totalRecord", {"bId": this.bId}, (data) => {
+                if (data.code == 1) {
+                    this.groupDateBean = data.obj;
+                }
+            });
 
+            $.post("/bookStore/orderInfo", {"bId": this.bId, "pageno": 1}, (data) => {
+                if (data.code == 1) {
+                    this.orderInfoBean = data.obj;
+                }
+
+            });
+
+            $.post("/bookStore/recordInfo", {"bId": this.bId, "pageno": 1}, (data) => {
+                if (data.code == 1) {
+                    this.recordInfoBean = data.obj;
+                }
+            })
         }
     });
 
-    function overview(bId) {
-        $.post("/bookStore/totalRecord", {"bId": bId}, (data) => {
-            if (data.code == 1) {
-                return data.obj;
-            }
-        })
-    }
 
 </script>
 

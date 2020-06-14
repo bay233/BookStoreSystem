@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FinishOrder</title>
+</head>
+<body>
+<div id="FinishOrderInfo">
+    <h4>已完成交易</h4>
+    <div class="card" style="width: 60%;" v-for="item in orderAndBookList">
+        <div class="float-left">
+            <img class="float-left" :src="item.book.picture" style="height: 100px; width: 70px;margin-left: 5%;">
+            <div class="float-left" style="margin: 20px; margin-left: 10%;">
+                <h5>{{item.book.bName}}</h5>
+                <p>{{item.order.num}}件，共￥{{item.order.num*item.book.price}}</p>
+                <p>{{item.order.dateTime.split(".")[0].replace("T"," ")}}</p>
+            </div>
+            <div class="float-left" style="margin-top: 30px; margin-left: 3%;">
+                <p style="font-size: 12px;margin-bottom: 6px;">{{item.order.addr}}</p>
+                <p style="font-size: 12px;margin-bottom: 6px;">{{item.order.phone}}</p>
+            </div>
+            <div class="float-right" style="margin-top: 40px; margin-right: 20px;">
+                <div style="text-align: center; font-size: 12px;">
+                    <p v-if="item.order.state==3">交易已完成</p>
+                    <p v-if="item.order.state==5">已退款</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    new Vue({
+        el:"#FinishOrderInfo",
+        data:{
+            orderAndBookList:null,
+        },
+        methods:{
+
+        },
+        mounted:function () {
+            let uId = $("#nav").attr("data-uId");
+            $.post("/bookStore/queryOrders",{"uId":uId,"states":"3,5"},(data) => {
+                if(data.code == 1){
+                    this.orderAndBookList = data.obj;
+                }
+            })
+        }
+    })
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delivery Management </title>
+</head>
+<body>
+<div id="deliveryManagement">
+    <h4>待发货订单管理</h4>
+    <div class="card" style="width: 60%;" v-for="item in orderAndBookList">
+        <div class="float-left">
+            <img class="float-left" :src="item.book.picture" style="height: 100px; width: 70px;margin-left: 5%;">
+            <div class="float-left" style="margin: 20px; margin-left: 10%;">
+                <h5>{{item.book.bName}}</h5>
+                <p>{{item.order.num}}件，共￥{{item.order.num*item.book.price}}</p>
+                <p>{{item.order.dateTime.split(".")[0].replace("T"," ")}}</p>
+            </div>
+            <div class="float-left" style="margin-top: 30px; margin-left: 3%;">
+                <p style="font-size: 12px;margin-bottom: 6px;">{{item.order.addr}}</p>
+                <p style="font-size: 12px;margin-bottom: 6px;">{{item.order.phone}}</p>
+            </div>
+            <div class="float-right" style="margin-top: 40px; margin-right: 20px;">
+                <div style="text-align: center; font-size: 12px;">
+                    <p>已支付</p>
+                </div>
+                <a href="javascript:void(0)"  class="text-warning" style="margin-right: 10px;" @click="clickAcceptReceipt(`${item.order.oId}`)">确认发货</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+    new Vue({
+        el:"#deliveryManagement",
+        data:{
+            orderAndBookList:null,
+        },
+        methods:{
+            clickAcceptReceipt:function (oId) {
+                $.post("/bookStore/updateByState",{"oId":oId,"state":2},(data) => {
+                    if(data.code == 1){
+                        alert("操作成功！")
+                    }
+                })
+            }
+        },
+        mounted:function () {
+            $.post("/bookStore/managementOrder",{"state":1},(data) => {
+                if(data.code == 1){
+                    this.orderAndBookList = data.obj;
+                }
+            })
+        }
+    })
+
+
+</script>
+
+</body>
+</html>

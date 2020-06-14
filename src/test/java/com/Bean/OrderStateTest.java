@@ -1,6 +1,5 @@
 package com.Bean;
 
-import com.Bean.Em.OrderState;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -11,12 +10,6 @@ public class OrderStateTest {
 
     @Test
     public void printState(){
-        System.out.println(OrderState.WAIT_PAY);
-        System.out.println(OrderState.COMPLETE_PAY);
-        System.out.println(OrderState.TRANSPORTING);
-        System.out.println(OrderState.COMPLETED);
-        System.out.println(OrderState.REFUNDING);
-        System.out.println(OrderState.COMPLETE_REFUND);
 
     }
 

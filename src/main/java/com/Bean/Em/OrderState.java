@@ -1,28 +1,28 @@
 package com.Bean.Em;
 
-public class OrderState {
-    /**
-     * 等待付款
-     **/
-    public static Integer WAIT_PAY = 1;
-    /**
-     * 完成付款
-     **/
-    public static Integer COMPLETE_PAY = 2;
-    /**
-     * 运送中
-     **/
-    public static Integer TRANSPORTING = 3;
-    /**
-     * 完成收货
-     **/
-    public static Integer COMPLETED = 4;
-    /**
-     * 退款中
-     **/
-    public static Integer REFUNDING = 5;
-    /**
-     * 退款成功
-     **/
-    public static Integer COMPLETE_REFUND = 6;
+
+public enum OrderState {
+    NEW_ORDER(0, "待支付"),
+    PAID_ORDER(1, "已支付"),
+    SHIPPED_ORDER(2, "已发货"),
+    FINISHED_ORDER(3, "已完结"),
+    REFUND_ORDER(4, "退款中"),
+    CANCEL_ORDER(5, "已退款"),
+    DELETE_ORDER(-1, "移除");
+
+    private final Integer code;
+    private final String value;
+
+    OrderState(Integer code, String value) {
+        this.code = code;
+        this.value = value;
+    }
+
+    public Integer getCode() {
+        return code;
+    }
+
+    public String getValue() {
+        return value;
+    }
 }

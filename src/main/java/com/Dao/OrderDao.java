@@ -20,6 +20,7 @@ public interface OrderDao {
      */
     Order query(Long oId);
 
+
     /**
      * 根据用户id查询订单
      *
@@ -42,6 +43,8 @@ public interface OrderDao {
      * @param state 状态值
      */
     Order[] queryByState(Integer state);
+
+    Order[] queryByState(Long uId,Integer state);
 
     /**
      * 分页查询，根据Order对象的属性值筛选结果，同时我们认为{num,adder,phone}作为为条件查询是无意义的

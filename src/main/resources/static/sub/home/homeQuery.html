@@ -7,23 +7,155 @@
 <body>
 <div id="homeQuery">
     <div class="input-group mb-3" style="width: 500px; margin: 0 auto; margin-top: 40px;">
-        <input type="text" class="form-control" placeholder="Search" v-model="QueryBookKey">
+        <input type="text" class="form-control" placeholder="Search" v-model="QueryBookKey"
+               @keyup.enter="clickQueryBook()">
         <div class="input-group-append">
             <button class="btn btn-success" type="submit" @click="clickQueryBook()">Search</button>
         </div>
     </div>
-</div>
+    <div id="BookInfo">
+        <p class="text-muted" style="text-align: center;" v-if="BookList!=null">搜索结果</p>
+        <p class="text-muted" style="text-align: center;" v-if="BookList==null">无搜索结果</p>
+        <div class="card" style="width: 40%; margin: 0 auto; margin-top: 20px;" v-for="book in BookList">
+            <div class="float-left">
+                <img class="float-left" :src="book.picture" style="height: 100px; width: 70px;margin-left: 5%;">
+                <div class="float-left" style="margin: 20px; margin-left: 10%;">
+                    <h5>{{book.bName}}</h5>
+                    <p>￥{{book.price}}</p>
+                </div>
+                <div class="float-right" style="margin-top: 60px; margin-right: 20px;">
+                    <a href="javascript:void(0)" class="text-success" style="margin-right: 10px;"
+                       @click="clickOrderNow(`${book.bId}`)">立即下单</a>
+                    <a href="javascript:void(0)" class="text-success" style="margin-right: 10px;"
+                       @click="clickAddCart(`${book.bId}`)">加入购物车</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- 模态框 -->
+    <div id="messageBut" data-toggle="modal" data-target="#message" data-operation="" data-bId=""></div>
+    <div class="modal fade" id="message">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- 模态框头部 -->
+                <div class="modal-header">
+                    <h4 class="modal-title">请输入信息</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <!-- 模态框主体 -->
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">地址</span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="address" v-model="addr">
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">电话号码</span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="phone" v-model="phone">
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">数量</span>
+                    </div>
+                    <input type="number" class="form-control" placeholder="num" v-model="num">
+                </div>
+                <!-- 模态框底部 -->
+                <div class="modal-footer">
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" @click="clickinserOrder()">
+                            确定
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     new Vue({
         el: "#homeQuery",
         data: {
             QueryBookKey: "",
+            BookList: null,
+            addr: "",
+            phone: "",
+            num: 1,
         },
         methods: {
             clickQueryBook: function () {
-                alert(this.QueryBookKey)
+                $.post("/bookStore/queryBook", {"key": this.QueryBookKey}, (data) => {
+                    if (data.code == 1) {
+                        this.BookList = data.obj;
+                    }
+                })
+            },
+            clickOrderNow: function (bId) {
+                this.inputInfo(bId, "clickOrderNow");
+            },
+            clickAddCart: function (bId) {
+                this.inputInfo(bId, "clickAddCart");
+
+            },
+
+            inputInfo: function (bId, operation) {
+                var uId = $("#nav").attr("data-uId");
+                if (uId == "" || uId == null) {
+                    alert("请先登陆！");
+                    return ;
+                }
+                $('#messageBut').attr("data-operation", operation);
+                $('#messageBut').attr("data-bId", bId);
+                $('#messageBut').click();
+            },
+
+            clickinserOrder: function () {
+                if (this.addr == "" || this.phone == "" || this.num <= 0){
+                    alert("订单信息有误！");
+                    return;
+                }
+                var uId = $("#nav").attr("data-uId");
+                var operation = $('#messageBut').attr("data-operation");
+                var bId = $('#messageBut').attr("data-bId");
+
+                if (operation == "clickOrderNow") {
+                    $.post("/bookStore/nowPayment", {
+                        "uId": uId,
+                        "bId": bId,
+                        "addr": this.addr,
+                        "phone": this.phone,
+                        "num": this.num,
+                        "state": "1"
+                    }, (data) => {
+                        if (data.code == 1) {
+                            alert("购买成功！");
+                        } else {
+                            alert("出现错误！");
+                        }
+                    })
+                } else if (operation == "clickAddCart") {
+                    $.post("/bookStore/insertCart", {
+                        "uId": uId,
+                        "bId": bId,
+                        "addr": this.addr,
+                        "phone": this.phone,
+                        "num": this.num,
+                        "state": "0"
+                    }, (data) => {
+                        if (data.code == 1) {
+                            alert("加入购物车成功！");
+                        } else {
+                            alert("出现错误！");
+                        }
+                    })
+
+                }
+
             }
+
         },
     });
 

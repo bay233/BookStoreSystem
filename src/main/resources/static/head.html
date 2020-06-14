@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>head</title>
+</head>
+<body>
+<div id="nav" data-uId="">
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <ul class="navbar-nav">
+            <li :class="{'nav-item active':navClass0,'nav-item':!navClass0}">
+                <a class="nav-link" href="javascript:void(0)" @click="clickNav(0)">首页</a>
+            </li>
+            <li :class="{'nav-item active':navClass1,'nav-item':!navClass1}" v-show="!isUserLogin">
+                <a class="nav-link" href="javascript:void(0)" @click="clickNav(1)">登陆/注册</a>
+            </li>
+
+            <li :class="nav-item" v-show="isUserLogin" data-toggle="dropdown">
+                <a class="nav-link dropdown-toggle" id="userName" href="javascript:void(0)">NullName</a>
+            </li>
+
+            <div class="dropdown-menu" style="margin-left: 5%">
+                <a class="dropdown-item" href="javascript:void(0)" @click="clicklogOut()">退出登陆</a>
+            </div>
+
+            <li :class="{'nav-item active':navClass2,'nav-item':!navClass2}" v-show="isUserLogin">
+                <a class="nav-link" href="javascript:void(0)" @click="clickNav(2)">购物车</a>
+            </li>
+            <li :class="{'nav-item active':navClass3,'nav-item':!navClass3}" v-show="isUserLogin&&user.uId==1">
+                <a class="nav-link" href="javascript:void(0)" @click="clickNav(3)">管理</a>
+            </li>
+
+        </ul>
+    </nav>
+</div>
+<script>
+    var headVue = new Vue({
+        el: "#nav",
+        data: {
+            navClass0: false, navClass1: false, navClass2: false, navClass3: false,
+            isUserLogin: false,
+            user: null,
+        },
+        methods: {
+            clickNav: function (index) {
+                switch (index) {
+                    case 0:
+                        window.location.href = "/index.html ";
+                        break;
+                    case 1:
+                        window.location.href = "/login.html ";
+                        break;
+                    case 2:
+                        if (this.isUserLogin != null)
+                            window.location.href = "/order.html ";
+                        else
+                            alert("请先登陆！");
+                        break;
+                    case 3:
+                        window.location.href = "/administration.html";
+                        break;
+                }
+            },
+            clicklogOut:function () {
+                $.get("/bookStore/logOut",(data) => {
+                    if (data.code == 1){
+                        this.isUserLogin = true;
+                        this.user = data.obj;
+                        $("#nav").attr("data-uId","");
+                        $("#userName").text("NullName");
+                        window.location.reload();
+                    }
+                })
+            },
+
+            heartbeatUser:function () {
+                $.get("/bookStore/cacheUser",(data) => {
+                    if (data.code == 1){
+                        this.isUserLogin = true;
+                        this.user = data.obj;
+                        $("#nav").attr("data-uId",this.user.uId);
+                        $("#userName").text(this.user.uName);
+                    }else{
+                        this.isUserLogin = false;
+                        this.user = null;
+                        $("#nav").attr("data-uId","");
+                        $("#userName").text("NullName");
+                    }
+                });
+            }
+        },
+        mounted: function () {
+            var option = $("#head").attr("data-option")
+            if (option == 0){
+                this.navClass0 = true;
+            }
+            if(option == 2){
+                this.navClass2 = true;
+            }
+            if(option == 3){
+                this.navClass3 = true;
+            }
+            this.heartbeatUser();
+            var heartbeat = setInterval(function () {
+                this.heartbeatUser();
+            }, 60000)
+        }
+    });
+
+
+</script>
+</body>
+</html>

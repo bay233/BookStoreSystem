@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UnfinishedOrder</title>
+</head>
+<body>
+<div id="UnfinishedOrderInfo">
+    <h4>未完成订单</h4>
+    <div class="card" style="width: 60%;" v-for="item in orderAndBookList">
+        <div class="float-left">
+            <img class="float-left" :src="item.book.picture" style="height: 100px; width: 70px;margin-left: 5%;">
+            <div class="float-left" style="margin: 20px; margin-left: 10%;">
+                <h5>{{item.book.bName}}</h5>
+                <p>{{item.order.num}}件，共￥{{item.order.num*item.book.price}}</p>
+                <p>{{item.order.dateTime.split(".")[0].replace("T"," ")}}</p>
+            </div>
+            <div class="float-left" style="margin-top: 30px; margin-left: 3%;">
+                <p style="font-size: 12px;margin-bottom: 6px;">{{item.order.addr}}</p>
+                <p style="font-size: 12px;margin-bottom: 6px;">{{item.order.phone}}</p>
+            </div>
+            <div class="float-right" style="margin-top: 40px; margin-right: 20px;">
+                <div style="text-align: center; font-size: 12px;">
+                    <p v-if="item.order.state==0">待支付</p>
+                    <p v-if="item.order.state==1">已支付</p>
+                    <p v-if="item.order.state==2">已发货</p>
+                    <p v-if="item.order.state==4">退款中</p>
+                </div>
+                <a href="javascript:void(0)" v-if="item.order.state==0" class="text-success" style="margin-right: 10px;" @click="clickconfirmPayment(`${item.order.oId}`)">确认付款</a>
+                <a href="javascript:void(0)" v-if="item.order.state==2" class="text-success" style="margin-right: 10px;"  @click="clickconfirmReceipt(`${item.order.oId}`)">确认收货</a>
+                <a href="javascript:void(0)" v-if="item.order.state==1 || item.order.state==2" class="text-success" style="margin-right: 10px;" @click="clickRefund(`${item.order.oId}`)">退款</a>
+                <a href="javascript:void(0)" v-if="item.order.state==0" class="text-warning" style="margin-right: 10px;" @click="clickdelete(`${item.order.oId}`)">删除</a>
+                <a href="javascript:void(0)" v-if="item.order.state==4" class="text-warning" style="margin-right: 10px;" @click="clickCancelRefund(`${item.order.oId}`)">取消退款</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    new Vue({
+        el:"#UnfinishedOrderInfo",
+        data:{
+            orderAndBookList: null,
+        },
+        methods:{
+            // 确认付款
+            clickconfirmPayment:function (oId) {
+                $.post("/bookStore/payment",{"oId":oId, "state":1},(data)=>{
+                    if(data.code == 1){
+                        alert("操作成功！")
+                    }else{
+                        alert("发生了一点意外，请重试！")
+                    }
+                });
+            },
+
+            // 确认收货
+            clickconfirmReceipt:function (oId) {
+                this.updateOrderState(oId, 3)
+            },
+
+            // 退款
+            clickRefund:function (oId) {
+                this.updateOrderState(oId, 4)
+            },
+
+            // 取消退款
+            clickCancelRefund:function (oId) {
+                this.updateOrderState(oId, 2)
+            },
+
+            // 删除
+            clickdelete:function (oId) {
+                this.updateOrderState(oId, -1)
+            },
+
+            updateOrderState(oId,state){
+                $.post("/bookStore/updateByState",{"oId":oId, "state":state},(data)=>{
+                    if(data.code == 1){
+                        alert("操作成功！")
+                    }else{
+                        alert("发生了一点意外，请重试！")
+                    }
+                });
+            }
+
+
+        },
+        mounted:function () {
+            let uId = $("#nav").attr("data-uId");
+            $.post("/bookStore/queryOrders",{"uId":uId,"states":"0,1,2,4"},(data) => {
+                if(data.code == 1){
+                    this.orderAndBookList = data.obj;
+                }
+            })
+        }
+    })
+</script>
+
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CodePen - Neumorphism Login Form</title>
+
+    <link rel="stylesheet" href="bootstrap/css/style.css">
+    <script src="/js/jquery.js"></script>
+
+</head>
+<body>
+
+<div class="main" id="login">
+    <div class="container a-container" id="a-container">
+        <form class="form" id="a-form">
+            <h2 class="form_title title">会员注册</h2>
+            <input class="form__input" type="text" value="" placeholder="Name" id="logUpName">
+            <input class="form__input" type="text" value="" placeholder="Email" id="logUpEmail">
+            <input class="form__input" type="password" value="" placeholder="Password" id="logUpPwd">
+            <input class="form__input" type="password" value="" placeholder="Type Password Again" id="logUpPwdAgain">
+            <button class="form__button button submit" style="cursor:pointer;" onclick="clickLogUp()">注册</button>
+        </form>
+    </div>
+    <div class="container b-container" id="b-container">
+        <form class="form" id="b-form">
+            <h2 class="form_title title">会员登录</h2>
+            <input class="form__input" type="text" value="" placeholder="Email" id="loginEmail">
+            <input class="form__input" type="password" value="" placeholder="Password" id="loginPwd"><a
+                class="form__link"></a>
+            <button class="form__button button submit" style="cursor:pointer;" onclick="clickLogin()">登录</button>
+        </form>
+    </div>
+    <div class="switch" id="switch-cnt">
+        <div class="switch__circle"></div>
+        <div class="switch__circle switch__circle--t"></div>
+        <div class="switch__container" id="switch-c1">
+            <h2 class="switch__title title">Welcome Back !</h2>
+            <p class="switch__description description">To keep connected with us please login with your personal
+                info</p>
+            <button class="switch__button button switch-btn">登录</button>
+        </div>
+        <div class="switch__container is-hidden" id="switch-c2">
+            <h2 class="switch__title title">Hello Friend !</h2>
+            <p class="switch__description description">Enter your personal details and start journey with us</p>
+            <button class="switch__button button switch-btn">注册</button>
+        </div>
+    </div>
+</div>
+
+<script src="js/script.js"></script>
+
+<script>
+
+    function clickLogin() {
+        var uEmail = $("#loginEmail").val();
+        var uPwd = $("#loginPwd").val();
+
+        if (uEmail == "" || uPwd == "" || uPwd == null || uEmail == null) {
+            alert("用户名和密码不能为空！")
+        }
+        $.post("/bookStore/login", {
+            "uEmail": uEmail,
+            "uPwd": uPwd
+        }, (data) => {
+            if (data.code == 1) {
+                window.location.href = "/index.html ";
+            }
+        })
+
+    }
+
+
+    function clickLogUp() {
+        var uName = $("#logUpName").val();
+        var uEmail = $("#logUpEmail").val();
+        var uPwd = $("#logUpPwd").val();
+        var uPwdAgain = $("#logUpPwdAgain").val();
+
+        var re = /^([a-zA-Z0-9]+[-_\.]?)+@[a-zA-Z0-9]+\.[a-z]+$/;
+
+        if (uName == "" || uName == null) {
+            alert("用户名不能为空！");
+            return;
+        }
+        if (uEmail == "" || uEmail == null) {
+            alert("邮件地址不能为空！");
+            return;
+        }
+        if (!re.test(uEmail)) {
+            alert("邮件格式不合法！");
+            return;
+        }
+
+        if (uPwd == "" || uPwd == null || uPwd != uPwdAgain) {
+            alert("您输入的密码有误，请确保不为空和两次密码相同！");
+            return;
+        }
+
+        $.post("/bookStore/register", {
+            "uName": uName,
+            "uEmail": uEmail,
+            "uPwd": uPwd
+        }, (data) => {
+            if (data.code == 1) {
+                alert("注册成功！");
+                window.location.href = "/index.html ";
+            }
+        })
+    }
+
+</script>
+
+</body>
+</html>

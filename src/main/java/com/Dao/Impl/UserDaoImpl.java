@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class UserDaoImpl implements UserDao {
@@ -42,6 +43,20 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public boolean query(String uEmail) {
+        List<Map<String, Object>> list = jdbcTemplate.queryForList("select * from user where uEmail=?", uEmail);
+        return list.size() > 0;
+    }
+
+    @Override
+    public User loginByEmail(String uEmail) {
+        List<User> users = jdbcTemplate.query("select * from user where uEmail=?", (rs, rowNum) -> {
+            return setUser(rs);
+        }, uEmail);
+        return users.size() > 0? users.get(0) : null;
+    }
+
+    @Override
     public User[] queryLimit(User user, Integer start, Integer pageNum) {
         String sql = "select * from user where 1=1 ";
         List<Object> obj = new ArrayList<>();
@@ -51,9 +66,9 @@ public class UserDaoImpl implements UserDao {
                 us[0] = query(user.getuId());
                 return us;
             }
-            if (user.getuEmai() != null) {
+            if (user.getuEmail() != null) {
                 sql += " and uEmai=? ";
-                obj.add(user.getuEmai());
+                obj.add(user.getuEmail());
             }
             if (user.getuPwd() != null) {
                 sql += " and uPwd=? ";
@@ -85,7 +100,7 @@ public class UserDaoImpl implements UserDao {
         KeyHolder kh = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, user.getuEmai());
+            ps.setString(1, user.getuEmail());
             ps.setString(2, user.getuPwd());
             ps.setString(3, user.getuName());
             return ps;
@@ -108,7 +123,7 @@ public class UserDaoImpl implements UserDao {
     private User setUser(ResultSet rs) throws SQLException {
         User user = new User();
         user.setuId(rs.getLong(1));
-        user.setuEmai(rs.getString(2));
+        user.setuEmail(rs.getString(2));
         user.setuPwd(rs.getString(3));
         user.setuName(rs.getString(4));
         return user;

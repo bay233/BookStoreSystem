@@ -13,6 +13,10 @@ public interface UserDao {
      */
     User query(Long uId);
 
+    boolean query(String uEmail);
+
+    User loginByEmail(String uEmail);
+
     /**
      * 分页查询，查询条件，如为User对象空则按主键顺序，若不为空，则根据对象中的属性进行查询
      * @param user  传入User对象（若要根据uEmai查询  则只需要set.uEmai()将值传入即可）

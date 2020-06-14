@@ -18,13 +18,14 @@ public class Order implements Serializable {
     @ApiModelProperty(value="购买数量", dataType = "java.lang.Integer")
     private Integer num;
     @ApiModelProperty(value="收货地址", dataType = "java.lang.String")
-    private String adder;
+    private String addr;
     @ApiModelProperty(value="联系电话", dataType = "java.lang.Long")
     private Long phone;
-    @ApiModelProperty(value="购买时间", dataType = "java.sql.Timestamp")
-    private Timestamp dateTime;
     @ApiModelProperty(value="订单状态", dataType = "java.lang.Integer")
     private Integer state;
+    @ApiModelProperty(value="购买时间", dataType = "java.sql.Timestamp")
+    private Timestamp dateTime;
+
 
     public void setoId(Long oId) {
         this.oId = oId;
@@ -42,8 +43,8 @@ public class Order implements Serializable {
         this.num = num;
     }
 
-    public void setAdder(String adder) {
-        this.adder = adder;
+    public void setAddr(String addr) {
+        this.addr = addr;
     }
 
     public void setPhone(Long phone) {
@@ -74,8 +75,8 @@ public class Order implements Serializable {
         return num;
     }
 
-    public String getAdder() {
-        return adder;
+    public String getAddr() {
+        return addr;
     }
 
     public Long getPhone() {
@@ -97,7 +98,7 @@ public class Order implements Serializable {
                 ", uId=" + uId +
                 ", bId=" + bId +
                 ", num=" + num +
-                ", adder='" + adder + '\'' +
+                ", addr='" + addr + '\'' +
                 ", phone=" + phone +
                 ", dateTime=" + dateTime +
                 ", state=" + state +

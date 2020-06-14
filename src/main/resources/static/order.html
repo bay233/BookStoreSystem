@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>order</title>
+    <script src="/js/vue.js"></script>
+    <script src="/js/jquery.js"></script>
+
+    <!-- bootstrap4 -->
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+</head>
+<body>
+<div id="head" data-option="2">
+    <script>
+        $("#head").load("head.html");
+    </script>
+</div>
+
+<div id="context">
+    <div id="order">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-3 col-md-6 col-lg-4 col-xl-2" style="width: 250px;margin-top: 50px;">
+                    <div class="container">
+                        <div id="accordion">
+                            <div class="card">
+                                <div class="card-header">
+                                    <a class="card-link" data-toggle="collapse" href="#collapseOne">
+                                        购物车管理
+                                    </a>
+                                </div>
+                                <div id="collapseOne" class="collapse show" data-parent="#accordion">
+                                    <div class="container">
+                                        <ul class="nav flex-column">
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="javascript:void(0)"
+                                                   @click="clickUnfinishedOrder()">未完成订单</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="javascript:void(0)"
+                                                   @click="clickFinishOrder()">已完成订单</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-9 col-md-6 col-lg-8 col-xl-10" style="margin-top: 50px;">
+                    <div id="queryResult">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        new Vue({
+            el:"#order",
+            data:{
+
+            },
+            methods:{
+                clickUnfinishedOrder:function () {
+                    $("#queryResult").load("/sub/order/UnfinishedOrder.html");
+
+                },
+
+                clickFinishOrder:function(){
+                    $("#queryResult").load("/sub/order/FinishOrder.html");
+                }
+            },
+            mounted:function(){
+
+            }
+        })
+
+    </script>
+</div>
+
+</body>
+</html>

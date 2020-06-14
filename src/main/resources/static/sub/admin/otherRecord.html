@@ -8,7 +8,7 @@
 <div id="statistics">
     <h2>销售统计</h2>
     <div class="input-group mb-3" style="width: 500px; margin:0px auto; margin-top: 40px;">
-        <input type="text" class="form-control" placeholder="Search" v-model="QueryBookKey">
+        <input type="text" class="form-control" placeholder="Search" v-model="QueryBookKey" @keyup.enter="clickQueryBook()">
         <div class="input-group-append">
             <button class="btn btn-success" type="submit" @click="clickQueryBook()">Search</button>
         </div>
@@ -229,6 +229,14 @@
             clickStockInfo:function(bId){
                 $("#statistics").load("/sub/admin/stockInfo.html");
                 $("#statistics").attr("data-InfobId",bId);
+            },
+
+            clickQueryBook:function () {
+                $.post("/bookStore/queryRecord",{"bName":this.QueryBookKey},(data)=>{
+                    if(data.code == 1){
+                        this.PageBean.list = data.obj
+                    }
+                })
             }
         },
         mounted: function () {

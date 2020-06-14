@@ -62,7 +62,7 @@ public class BookDaoImpl implements BookDao {
      */
     @Override
     public Book[] queryDim(String name) {
-        String sql = "select * from book where bName=?";
+        String sql = "select * from book where bName like ?";
         name = "%" + name + "%";
         List<Book> books = jdbcTemplate.query(sql,
                 (rs, rowNum) -> {

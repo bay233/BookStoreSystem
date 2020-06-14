@@ -5,7 +5,6 @@
     <title>后台管理页面</title>
 
     <script src="/js/vue.js"></script>
-    <script src="/js/axios.js"></script>
     <script src="/js/jquery.js"></script>
 
     <!-- bootstrap4 -->
@@ -13,58 +12,11 @@
     <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-<div id="nav">
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-        <ul class="navbar-nav">
-            <li :class="{'nav-item active':navClass0,'nav-item':!navClass0}">
-                <a class="nav-link" href="javascript:void(0)" @click="clickNav(0)">Home</a>
-            </li>
-            <li :class="{'nav-item active':navClass1,'nav-item':!navClass1}">
-                <a class="nav-link" href="javascript:void(0)" @click="clickNav(1)">Login</a>
-            </li>
-            <li :class="{'nav-item active':navClass2,'nav-item':!navClass2}">
-                <a class="nav-link" href="javascript:void(0)" @click="clickNav(2)">Order</a>
-            </li>
-            <li :class="{'nav-item active':navClass3,'nav-item':!navClass3}">
-                <a class="nav-link" href="javascript:void(0)" @click="clickNav(3)">Link</a>
-            </li>
-        </ul>
-    </nav>
+<div id="head" data-option="3">
+    <script>
+        $("#head").load("head.html");
+    </script>
 </div>
-<script>
-    new Vue({
-        el: "#nav",
-        data: {
-            navClass0: false, navClass1: false, navClass2: false, navClass3: true,
-
-        },
-        methods: {
-            clickNav: function (index) {
-                this.navClass0 = false;
-                this.navClass1 = false;
-                this.navClass2 = false;
-                this.navClass3 = false;
-                switch (index) {
-                    case 0:
-                        this.navClass0 = true;
-                        window.location.href = "/index.html";
-                        break;
-                    case 1:
-                        this.navClass1 = true;
-                        break;
-                    case 2:
-                        this.navClass2 = true;
-                        break;
-                    case 3:
-                        this.navClass3 = true;
-                        window.location.href = "/administration.html";
-                        break;
-                }
-            }
-        },
-    });
-
-</script>
 
 <div id="context">
     <div id="administration">
@@ -96,23 +48,6 @@
                             </div>
                             <div class="card">
                                 <div class="card-header">
-                                    <a class="collapsed card-link" data-toggle="collapse" href="#collapseTwo">
-                                        销售统计
-                                    </a>
-                                </div>
-                                <div id="collapseTwo" class="collapse" data-parent="#accordion">
-                                    <div class="container">
-                                        <ul class="nav flex-column">
-                                            <li class="nav-item">
-                                                <a class="nav-link" href="javascript:void(0)"
-                                                   @click="statistics()">销售统计</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card">
-                                <div class="card-header">
                                     <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree">
                                         订单管理
                                     </a>
@@ -121,10 +56,10 @@
                                     <div class="container">
                                         <ul class="nav flex-column">
                                             <li class="nav-item">
-                                                <a class="nav-link" href="javascript:void(0)">退款订单管理</a>
+                                                <a class="nav-link" href="javascript:void(0)" @click="clickRefundManagement()">退款订单管理</a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" href="javascript:void(0)">发货订单管理</a>
+                                                <a class="nav-link" href="javascript:void(0)" @click="clickDeliveryManagement()">发货订单管理</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -132,7 +67,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
                 <div class="col-sm-9 col-md-6 col-lg-8 col-xl-10" style="margin-top: 50px;">
                     <div id="queryResult">
@@ -146,7 +80,6 @@
 </body>
 
 <script>
-    $("#queryResult").load("/sub/admin/home.html");
     new Vue({
         el: "#administration",
         data: {},
@@ -159,6 +92,12 @@
             },
             statistics: function () {
                 $("#queryResult").load("/sub/admin/statistics.html");
+            },
+            clickRefundManagement:function(){
+                $("#queryResult").load("/sub/admin/refundManagement.html");
+            },
+            clickDeliveryManagement:function () {
+                $("#queryResult").load("/sub/admin/deliveryManagement.html");
             }
         },
     });

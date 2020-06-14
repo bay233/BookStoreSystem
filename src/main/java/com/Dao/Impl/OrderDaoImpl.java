@@ -44,6 +44,7 @@ public class OrderDaoImpl implements OrderDao {
                 }, oId);
     }
 
+
     @Override
     public Order[] queryByUid(Long uId) {
         List<Order> orders = jdbcTemplate.query("select * from orders where uId=?",
@@ -68,6 +69,15 @@ public class OrderDaoImpl implements OrderDao {
                 (rs, rowNum) -> {
                     return setOrder(rs);
                 }, state);
+        return orders.toArray(new Order[orders.size()]);
+    }
+
+    @Override
+    public Order[] queryByState(Long uId, Integer state) {
+        List<Order> orders = jdbcTemplate.query("select * from orders where uId=? and state=?",
+                (rs, rowNum) -> {
+                    return setOrder(rs);
+                },uId,state);
         return orders.toArray(new Order[orders.size()]);
     }
 
@@ -114,7 +124,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public Order addOrder(Order order) {
-        String sql = "insert into orders values(oId,?,?,?,?,?,now(),?)";
+        String sql = "insert into orders values(oId,?,?,?,?,?,?,now())";
         // 使用回调机制返回新添加的数据的自增列值，这里是返回uId
         KeyHolder kh = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
@@ -122,7 +132,7 @@ public class OrderDaoImpl implements OrderDao {
             ps.setLong(1, order.getuId());
             ps.setLong(2, order.getbId());
             ps.setInt(3, order.getNum());
-            ps.setString(4, order.getAdder());
+            ps.setString(4, order.getAddr());
             ps.setLong(5, order.getPhone());
             ps.setInt(6, order.getState());
             return ps;
@@ -177,10 +187,10 @@ public class OrderDaoImpl implements OrderDao {
         o.setuId(rs.getLong(2));
         o.setbId(rs.getLong(3));
         o.setNum(rs.getInt(4));
-        o.setAdder(rs.getString(5));
+        o.setAddr(rs.getString(5));
         o.setPhone(rs.getLong(6));
-        o.setDateTime(rs.getTimestamp(7));
-        o.setState(rs.getInt(8));
+        o.setState(rs.getInt(7));
+        o.setDateTime(rs.getTimestamp(8));
         return o;
     }
 }
