@@ -19,7 +19,7 @@ public class AppConfig {
 		dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
 		dataSource.setUrl("jdbc:mysql://localhost:3306/bss?serverTimezone=UTC");
 		dataSource.setUsername("root");
-		dataSource.setPassword("a");
+		dataSource.setPassword("367960");
 		return dataSource;
 	}
 
